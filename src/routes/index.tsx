@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { lazy, Suspense, useEffect, useState } from "react";
 import FloorSelector from "../components/map/FloorSelector";
 import { FLOORS } from "../data/floors";
+import { DEMO_PATH } from "../data/navPath";
 
 // Lazy import keeps Three.js / WebGL code out of the SSR bundle entirely.
 const IndoorMap = lazy(() => import("../components/map/IndoorMap"));
@@ -18,6 +19,7 @@ export const Route = createFileRoute("/")({ component: MapPage });
 
 function MapPage() {
 	const [activeFloor, setActiveFloor] = useState(0);
+	const [showPath, setShowPath] = useState(true);
 	const current = FLOORS[activeFloor];
 
 	return (
@@ -30,6 +32,27 @@ function MapPage() {
 					Viewing:{" "}
 					<span className="font-medium text-blue-400">{current.name}</span>
 				</span>
+
+				{/* Navigation path toggle */}
+				<button
+					type="button"
+					onClick={() => setShowPath((v) => !v)}
+					className={[
+						"ml-2 flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors",
+						showPath
+							? "border-blue-500 bg-blue-500/15 text-blue-300"
+							: "border-gray-700 bg-transparent text-gray-500 hover:border-gray-500 hover:text-gray-300",
+					].join(" ")}
+				>
+					<span
+						className={[
+							"h-2 w-2 rounded-full",
+							showPath ? "bg-blue-400" : "bg-gray-600",
+						].join(" ")}
+					/>
+					{DEMO_PATH.label}
+				</button>
+
 				<span className="ml-auto text-xs text-gray-600">
 					Drag to orbit · Scroll to zoom · Right-drag to pan
 				</span>
@@ -45,7 +68,7 @@ function MapPage() {
 							</div>
 						}
 					>
-						<IndoorMap activeFloor={activeFloor} />
+						<IndoorMap activeFloor={activeFloor} showPath={showPath} />
 					</Suspense>
 				</ClientOnly>
 				<FloorSelector

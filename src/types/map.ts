@@ -42,3 +42,16 @@ export type Floor = {
 	/** Staircases share position with all other floors */
 	staircases: Staircase[];
 };
+
+export type Waypoint = {
+	x: number;
+	z: number;
+	/** Which floor this waypoint sits on */
+	floorIndex: number;
+};
+
+export type NavPath = {
+	id: string;
+	label: string;
+	waypoints: Waypoint[];
+};

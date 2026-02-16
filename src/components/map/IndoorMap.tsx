@@ -3,7 +3,9 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { FLOOR_HEIGHT, FLOORS } from "../../data/floors";
+import { DEMO_PATH } from "../../data/navPath";
 import type { Floor, Room, Staircase } from "../../types/map";
+import NavigationPath from "./NavigationPath";
 
 // ─── Colour palette per room type ──────────────────────────────────────────
 
@@ -219,7 +221,10 @@ function CameraRig({
 
 // ─── Scene ─────────────────────────────────────────────────────────────────
 
-function Scene({ activeFloor }: Readonly<{ activeFloor: number }>) {
+function Scene({
+	activeFloor,
+	showPath,
+}: Readonly<{ activeFloor: number; showPath: boolean }>) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const controlsRef = useRef<any>(null);
 	const neighbourOpacityRef = useRef<number>(MAX_NEIGHBOUR_OPACITY);
@@ -287,6 +292,15 @@ function Scene({ activeFloor }: Readonly<{ activeFloor: number }>) {
 					/>
 				);
 			})}
+
+			{/* Navigation path — segments follow the same tilt-opacity as floors */}
+			{showPath && (
+				<NavigationPath
+					path={DEMO_PATH}
+					activeFloor={activeFloor}
+					opacityRef={neighbourOpacityRef}
+				/>
+			)}
 		</>
 	);
 }
@@ -295,14 +309,15 @@ function Scene({ activeFloor }: Readonly<{ activeFloor: number }>) {
 
 export default function IndoorMap({
 	activeFloor,
-}: Readonly<{ activeFloor: number }>) {
+	showPath,
+}: Readonly<{ activeFloor: number; showPath: boolean }>) {
 	return (
 		<Canvas
 			shadows
 			gl={{ antialias: true }}
 			style={{ width: "100%", height: "100%" }}
 		>
-			<Scene activeFloor={activeFloor} />
+			<Scene activeFloor={activeFloor} showPath={showPath} />
 		</Canvas>
 	);
 }
