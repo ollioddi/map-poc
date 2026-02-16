@@ -21,7 +21,7 @@ function MapPage() {
 	const current = FLOORS[activeFloor];
 
 	return (
-		<div className="flex h-[calc(100vh-3.5rem)] flex-col bg-gray-950">
+		<div className="flex h-screen flex-col bg-gray-950">
 			{/* Toolbar */}
 			<div className="flex items-center gap-4 border-b border-gray-800 bg-gray-900 px-4 py-2 text-sm text-gray-400">
 				<span className="font-semibold text-white">Indoor Map</span>
