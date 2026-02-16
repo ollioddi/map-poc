@@ -37,10 +37,7 @@ const MAX_NEIGHBOUR_OPACITY = 0.2;
 
 // ─── Room mesh ─────────────────────────────────────────────────────────────
 
-function RoomMesh({
-	room,
-	floorY,
-}: Readonly<{ room: Room; floorY: number }>) {
+function RoomMesh({ room, floorY }: Readonly<{ room: Room; floorY: number }>) {
 	const color = ROOM_COLORS[room.type] ?? "#e5e7eb";
 
 	return (
@@ -86,9 +83,7 @@ function StaircaseMesh({
 				const posZ = -stair.depth / 2 + stepDepth * i + stepDepth / 2;
 				return (
 					<mesh key={i} position={[0, 0.08 + stepH / 2, posZ]}>
-						<boxGeometry
-							args={[stair.width - 0.1, stepH, stepDepth - 0.06]}
-						/>
+						<boxGeometry args={[stair.width - 0.1, stepH, stepDepth - 0.06]} />
 						<meshStandardMaterial color={STAIR_STEP} roughness={0.5} />
 					</mesh>
 				);
@@ -127,12 +122,7 @@ function ActiveFloor({ floor }: Readonly<{ floor: Floor }>) {
 			))}
 
 			{floor.staircases.map((stair) => (
-				<StaircaseMesh
-					key={stair.id}
-					stair={stair}
-					floorY={floorY}
-					showLabel
-				/>
+				<StaircaseMesh key={stair.id} stair={stair} floorY={floorY} showLabel />
 			))}
 		</group>
 	);
@@ -214,11 +204,7 @@ function CameraRig({
 
 		// Smoothly re-centre on the active floor
 		const targetY = activeFloor * FLOOR_HEIGHT + FLOOR_SLAB;
-		controls.target.y = THREE.MathUtils.lerp(
-			controls.target.y,
-			targetY,
-			0.08,
-		);
+		controls.target.y = THREE.MathUtils.lerp(controls.target.y, targetY, 0.08);
 
 		// Map polar angle → neighbour opacity
 		const angle = controls.getPolarAngle();
@@ -241,7 +227,7 @@ function Scene({ activeFloor }: Readonly<{ activeFloor: number }>) {
 	const initialTarget = useMemo(
 		() => new THREE.Vector3(0, activeFloor * FLOOR_HEIGHT + FLOOR_SLAB, 0),
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[],
+		[activeFloor],
 	);
 
 	return (
